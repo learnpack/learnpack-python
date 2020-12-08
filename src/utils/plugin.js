@@ -17,13 +17,17 @@ module.exports = (pluginConfig) => {
     if(!exercise || exercise === undefined){
       throw Error("Missing exercise information")
     }
-    
+
     // if the action does not exist I don't do anything
     if(pluginConfig[action] === undefined){
       console.log(`Ignoring ${action}`)
       return () => null
     } 
     
+    if(exercise.language !== pluginConfig.language){
+      return () => null
+    }
+
     if( !exercise.files || exercise.files.length == 0){
       throw Error(`No files to process`)
     } 

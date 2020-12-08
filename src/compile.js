@@ -14,7 +14,7 @@ module.exports = {
     if(!entryPath) throw new Error("No app.py entry file");
 
     const content = fs.readFileSync(entryPath, "utf8");
-    const count = Utils.getMatches(/input\((?:["'`]{1}(.*)["'`]{1})?\)/gm, content);
+    const count = Utils.getMatches(/^([^\/])+input\((?:["'`]{1}(.*)["'`]{1})?\)/gm, content);
     let inputs = (count.length == 0) ? [] : await socket.ask(count);
 
     const result = await python.runFile(entryPath, { stdin: inputs.join('\n'), executionPath: 'python3' })

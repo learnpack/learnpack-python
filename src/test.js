@@ -76,7 +76,7 @@ def pytest_generate_tests(metafunc):
       const appPath = exercise.files.map(f => './'+f.path).find(f => f.indexOf('app.py') > -1)
       if(appPath !== undefined){
         const content = fs.readFileSync(appPath, "utf8")
-        const count = Utils.getMatches(/input\((?:["'`]{1}(.*)["'`]{1})?\)/gm, content)
+        const count = Utils.getMatches(/^([^\/])+input\((?:["'`]{1}(.*)["'`]{1})?\)/gm, content)
         let answers = (count.length == 0) ? [] : await socket.ask(count)
 
         return `pytest ${getEntry()} --testdox --capture=sys --color=yes --stdin='${JSON.stringify(answers)}'`

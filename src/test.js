@@ -50,7 +50,7 @@ def pytest_generate_tests(metafunc):
   run: async ({ exercise, socket, configuration }) => {
 
     const getEntry = () => {
-      console.log(exercise);
+      //console.log(exercise);
       let entryPath = exercise.files.map(f => './'+f.path).find(f => f.indexOf('test.py') > -1 || f.indexOf('tests.py') > -1)
       if (!fs.existsSync(entryPath)) throw TestingError(`🚫 No tests.py script found on the exercise in ${entryPath}`)
   

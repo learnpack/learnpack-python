@@ -10,8 +10,8 @@ module.exports = {
   },
   run: async function ({ exercise, socket }) {
 
-    let entryPath = exercise.files.map(f => './'+f.path).find(f => f.indexOf('app.py') > -1);
-    if(!entryPath) throw new Error("No app.py entry file");
+    let entryPath = exercise.entry || exercise.files.map(f => './'+f.path).find(f => f.indexOf('app.py') > -1);
+    if(!entryPath) throw new Error("No entry file to compile, maybe you need to create an app.py in the exercise directory?");
 
     const content = fs.readFileSync(entryPath, "utf8");
     const count = Utils.getMatches(/^([^\/])+input\((?:["'`]{1}(.*)["'`]{1})?\)/gm, content);

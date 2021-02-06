@@ -73,7 +73,7 @@ def pytest_generate_tests(metafunc):
 
     const getCommands = async function(){
 
-      const appPath = exercise.files.map(f => './'+f.path).find(f => f.indexOf('app.py') > -1)
+      const appPath = exercise.entry || exercise.files.map(f => './'+f.path).find(f => f.indexOf('app.py') > -1)
       if(appPath !== undefined){
         const content = fs.readFileSync(appPath, "utf8")
         const count = Utils.getMatches(/^([^\/])+input\((?:["'`]{1}(.*)["'`]{1})?\)/gm, content)
@@ -101,8 +101,7 @@ def pytest_generate_tests(metafunc):
       let _stdout = [rawStdout]
       if(errors.length > 0){
         msg = `\n\n   
-          ${chalk.red('Your code must to comply with the following tests:')} \n\n
-          ${[...new Set(errors)].map((e,i) => `     ${e.status !== 'failed' ? chalk.green.bold('✓ (done)') : chalk.red.bold('x (fail)')} ${i}. ${chalk.white(e.title)}`).join('\n')} \n\n`
+          ${chalk.red('Your code must to comply with the following tests:')} \n\n${[...new Set(errors)].map((e,i) => `     ${e.status !== 'failed' ? chalk.green.bold('✓ (done)') : chalk.red.bold('x (fail)')} ${i}. ${chalk.white(e.title)}`).join('\n')} \n\n`
         _stdout.push(msg)
       }
       return _stdout

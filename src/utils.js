@@ -7,8 +7,7 @@ const checkPython3 = () => {
 
         if(python.length > 0 && '3' === python[0]) return true
         else{
-        console.log("Python version: ",python)
-        return true
+            return true
         }
     } 
     catch (error) {

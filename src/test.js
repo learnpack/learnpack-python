@@ -1,7 +1,7 @@
 const fs = require('fs')
 const chalk = require("chalk")
 const shell = require('shelljs')
-const { Utils, TestingError } = require('./utils/index.js')
+const { Utils, TestingError } = require("learnpack/plugin")
 
 module.exports =  {
   validate: async function({ exercise, configuration }){

@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { python } = require('compile-run');
-const { Utils, CompilationError } = require('./utils/index.js');
+const { Utils, CompilationError } = require('learnpack/plugin')
 const { checkPython3 } = require('./utils.js');
 
 module.exports = {

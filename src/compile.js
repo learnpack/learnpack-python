@@ -10,17 +10,25 @@ module.exports = {
   },
   run: async function ({ exercise, socket }) {
 
-    let entryPath = exercise.entry || exercise.files.map(f => './'+f.path).find(f => f.indexOf('app.py') > -1);
+    let entryPath = exercise.files.map(f => './'+f.path).find(f => f.includes(exercise.entry || 'app.py'));
     if(!entryPath) throw new Error("No entry file to compile, maybe you need to create an app.py in the exercise directory?");
 
     const content = fs.readFileSync(entryPath, "utf8");
-    const count = Utils.getMatches(/^([^\/])+input\((?:["'`]{1}(.*)["'`]{1})?\)/gm, content);
+    const count = Utils.getMatches(/^(?:[^\/])+input\s*\(\s*(?:["'`]{1}(.*)["'`]{1})?\s*\)\s*/gm, content);
     let inputs = (count.length == 0) ? [] : await socket.ask(count);
-
+    
     const result = await python.runFile(entryPath, { stdin: inputs.join('\n'), executionPath: 'python3' })
     if(result.exitCode > 0) throw CompilationError(result.stderr);
-    return Utils.cleanStdout(result.stdout, count)
+    return cleanStdout(result.stdout, inputs)
     
   },
 }
-  
+
+const cleanStdout = (buffer, inputs) => {
+
+  // if(Array.isArray(inputs))
+  //   for(let i = 0; i < inputs.length; i++)
+  //     if(inputs[i]) buffer = buffer.replace(inputs[i],'');
+
+  return buffer;
+}

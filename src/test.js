@@ -51,10 +51,10 @@ def pytest_generate_tests(metafunc):
 
     const getEntry = () => {
       //console.log(exercise);
-      let entryPath = exercise.files.map(f => './'+f.path).find(f => f.indexOf('test.py') > -1 || f.indexOf('tests.py') > -1)
+      let entryPath = exercise.files.map(f => './'+f.path).find(f => f.includes('test.py') || f.includes('tests.py'))
       if (!fs.existsSync(entryPath)) throw TestingError(`🚫 No tests.py script found on the exercise in ${entryPath}`)
   
-      const appPath = exercise.files.map(f => './'+f.path).find(f => f.indexOf('app.py') > -1)
+      const appPath = exercise.files.map(f => './'+f.path).find(f => f.includes(exercise.entry || 'app.py'))
       if (fs.existsSync(appPath)){
         let content = fs.readFileSync(appPath, "utf8")
         const count = Utils.getMatches(/def\s[a-zA-Z]/gm, content)
@@ -73,7 +73,7 @@ def pytest_generate_tests(metafunc):
 
     const getCommands = async function(){
 
-      const appPath = exercise.entry || exercise.files.map(f => './'+f.path).find(f => f.indexOf('app.py') > -1)
+      const appPath = exercise.files.map(f => './'+f.path).find(f => f.includes(exercise.entry || 'app.py'))
       if(appPath !== undefined){
         const content = fs.readFileSync(appPath, "utf8")
         const count = Utils.getMatches(/^([^\/])+input\((?:["'`]{1}(.*)["'`]{1})?\)/gm, content)

@@ -14,7 +14,7 @@ module.exports = {
     if(!entryPath) throw new Error("No entry file to compile, maybe you need to create an app.py in the exercise directory?");
 
     const content = fs.readFileSync(entryPath, "utf8");
-    const count = Utils.getMatches(/^(?:[^\/])+input\s*\(\s*(?:["'`]{1}(.*)["'`]{1})?\s*\)\s*/gm, content);
+    const count = Utils.getMatches(/input\s*\(\s*(?:["'`]{1}(.*)["'`]{1})?\s*\)\s*/gm, content);
     let inputs = (count.length == 0) ? [] : await socket.ask(count);
     
     const result = await python.runFile(entryPath, { stdin: inputs.join('\n'), executionPath: 'python3' })

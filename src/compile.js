@@ -17,7 +17,7 @@ module.exports = {
     const count = Utils.getMatches(/input\s*\(\s*(?:["'`]{1}(.*)["'`]{1})?\s*\)\s*/gm, content);
     let inputs = (count.length == 0) ? [] : await socket.ask(count);
     
-    const result = await python.runFile(entryPath, { stdin: inputs.join('\n'), executionPath: 'python3' })
+    const result = await python.runFile(entryPath, { stdin: inputs.join('\n'), executionPath: 'python' })
     if(result.exitCode > 0) throw CompilationError(result.stderr);
     return cleanStdout(result.stdout, inputs)
     

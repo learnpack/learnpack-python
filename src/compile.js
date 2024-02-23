@@ -8,8 +8,10 @@ module.exports = {
     if(!checkPython3()) throw Error(`You need to have python3 installed to run test the exercises`)
     return true
   },
-  run: async function ({ exercise, socket }) {
+  run: async function ({ exercise, socket, telemetry }) {
 
+    const telemetryEventType = "compile"
+    // telemetry.registerEvent("start", "compiling")
     let entryPath = exercise.files.map(f => './'+f.path).find(f => f.includes(exercise.entry || 'app.py'));
     if(!entryPath) throw new Error("No entry file to compile, maybe you need to create an app.py in the exercise directory?");
 
@@ -17,7 +19,18 @@ module.exports = {
     const count = Utils.getMatches(/input\s*\(\s*(?:["'`]{1}(.*)["'`]{1})?\s*\)\s*/gm, content);
     let inputs = (count.length == 0) ? [] : await socket.ask(count);
     
+    const data = {
+      starting_at: Date.now(),
+      source_code: content,
+    }
     const result = await python.runFile(entryPath, { stdin: inputs.join('\n'), executionPath: 'python' })
+    data.ended_at = Date.now()
+    data.exit_code = result.exitCode
+    data.stdout = result.stdout
+    data.stderr = result.stderr
+
+    telemetry.registerStepEvent(exercise.position, telemetryEventType, data)
+
     if(result.exitCode > 0) throw CompilationError(result.stderr);
     return cleanStdout(result.stdout, inputs)
     

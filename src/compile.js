@@ -8,10 +8,7 @@ module.exports = {
     if(!checkPython3()) throw Error(`You need to have python3 installed to run test the exercises`)
     return true
   },
-  run: async function ({ exercise, socket, telemetry }) {
-
-    const telemetryEventType = "compile"
-    // telemetry.registerEvent("start", "compiling")
+  run: async function ({ exercise, socket }) {
     let entryPath = exercise.files.map(f => './'+f.path).find(f => f.includes(exercise.entry || 'app.py'));
     if(!entryPath) throw new Error("No entry file to compile, maybe you need to create an app.py in the exercise directory?");
 
@@ -23,25 +20,20 @@ module.exports = {
       starting_at: Date.now(),
       source_code: content,
     }
-    const result = await python.runFile(entryPath, { stdin: inputs.join('\n'), executionPath: 'python' })
+    let result = await python.runFile(entryPath, { stdin: inputs.join('\n'), executionPath: 'python' })
     data.ended_at = Date.now()
-    data.exit_code = result.exitCode
-    data.stdout = result.stdout
-    data.stderr = result.stderr
-
-    telemetry.registerStepEvent(exercise.position, telemetryEventType, data)
-
-    if(result.exitCode > 0) throw CompilationError(result.stderr);
-    return cleanStdout(result.stdout, inputs)
+    result.stdout = cleanStdout(result.stdout, inputs);
     
+    result = { ...result, ...data }
+    return result;
   },
 }
 
 const cleanStdout = (buffer, inputs) => {
 
-  // if(Array.isArray(inputs))
-  //   for(let i = 0; i < inputs.length; i++)
-  //     if(inputs[i]) buffer = buffer.replace(inputs[i],'');
+  if(Array.isArray(inputs))
+    for(let i = 0; i < inputs.length; i++)
+      if(inputs[i]) buffer = buffer.replace(inputs[i],'');
 
   return buffer;
 }

@@ -47,7 +47,7 @@ def pytest_generate_tests(metafunc):
 
     return true
   },
-  run: async ({ exercise, socket, configuration, telemetry }) => {
+  run: async ({ exercise, socket, configuration }) => {
 
 
     const getContent = () => {
@@ -119,9 +119,10 @@ def pytest_generate_tests(metafunc):
     let commands = await getCommands()
     if (!Array.isArray(commands)) commands = [commands]
 
-    const telemetryEventType = "test"
+
     let appContent = getContent()
-    const eventData = {
+    
+    const result = {
       starting_at: Date.now(),
       source_code: appContent,
     }
@@ -135,12 +136,14 @@ def pytest_generate_tests(metafunc):
       if (code != 0) break
     }
     
-    eventData.ended_at = Date.now()
-    eventData.exit_code = code
-    eventData.stdout = stdout
-    eventData.stderr = stderr
-    telemetry.registerStepEvent(exercise.position, telemetryEventType, eventData)
-    if (code != 0) throw TestingError(getStdout(stdout || stderr).join())
-    else return stdout
+    result.ended_at = Date.now()
+    result.exitCode = code
+    result.stdout = stdout
+    result.stderr = stderr
+
+    if (code != 0) {
+      result.stderr = getStdout(stdout || stderr).join()
+    }
+    return result
   }
 }

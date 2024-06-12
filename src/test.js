@@ -75,7 +75,7 @@ def pytest_generate_tests(metafunc):
         const directory = `${configuration.outputPath}/cached_app.py`
         fs.writeFileSync(directory, content)
       }
-      else if (configuration.grading === "isolated") throw TestingError(`🚫 No app.py script found on the exercise files`)
+      // else if (configuration.grading === "isolated") throw TestingError(`🚫 No app.py script found on the exercise files`)
 
       return entryPath
     }

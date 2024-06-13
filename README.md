@@ -12,6 +12,9 @@ Python Compiler for learnpack tutorials
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
+* [Usage](#usage)
+* [Commands](#commands)
+<!-- tocstop -->
 # Usage
 <!-- usage -->
 ```sh-session
@@ -19,7 +22,19 @@ $ npm install -g @learnpack/python
 $ oclif-example COMMAND
 running command...
 $ oclif-example (-v|--version|version)
-@learnpack/python/1.0.1 darwin-arm64 node-v16.20.0
+@learnpack/python/1.0.4 win32-x64 node-v20.10.0
+$ oclif-example --help [COMMAND]
+USAGE
+  $ oclif-example COMMAND
+...
+```
+<!-- usagestop -->
+```sh-session
+$ npm install -g @learnpack/python
+$ oclif-example COMMAND
+running command...
+$ oclif-example (-v|--version|version)
+@learnpack/python/1.0.3 linux-x64 node-v20.11.1
 $ oclif-example --help [COMMAND]
 USAGE
   $ oclif-example COMMAND
@@ -28,5 +43,7 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+
+<!-- commandsstop -->
 
 <!-- commandsstop -->
